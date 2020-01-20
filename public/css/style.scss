@@ -69,6 +69,12 @@ $green: #00c3a6;
     float: left;
 }
 
+.margin-10{
+    width: 100%;
+    display: table;
+    height: 10px;
+}
+
 /****helper end****/
 
 /****btn****/
@@ -115,6 +121,10 @@ $green: #00c3a6;
 
 .btn-ash {
     background: $ash-font;
+}
+
+.btn-purple {
+    background: #6653ff;
 }
 
 /****btn end****/
@@ -446,3 +456,45 @@ $green: #00c3a6;
 /*************/
 /****Dashboard End****/
 
+.bg-ash{
+    background-color: #f2f2f2;
+}
+
+/*card single*/
+.desc-text-card{
+    width: 100%;
+    display: table;
+    padding: 10px;
+    border: 1px solid #f2f2f2;
+    border-radius: 3px;
+}
+/*card single end*/
+.h-5{
+    font-size: 17px;
+}
+/*task list*/
+.taskList{
+    width: 100%;
+    padding: 5px;
+    display: table;
+    margin: 10px 0;
+    border: 1px solid #f2f2f2;
+    border-radius: 3px;
+    &.success{
+        background-color: #2ECC40 ;
+        .text-style{
+            color: #222222;
+        }
+    }
+    .line-finish{
+        text-decoration: line-through;
+        color: #222222;
+    }
+    .text-style{
+        font-size: 15px;
+        color: #4a4848;
+        text-transform: capitalize;
+        font-weight: 500;
+    }
+}
+/*task list end*/

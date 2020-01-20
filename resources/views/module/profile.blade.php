@@ -162,6 +162,7 @@
 
             });
         }
+
         @if(auth()->user()->avatar == '')
         $(function() {
             if (avatar.length == ''){

@@ -52,6 +52,22 @@ Route::post('/projects/card/delete', 'FrontController@projectCardsDelete')->name
 
 Route::get('/projects/single/card/{id}', 'FrontController@projectSingleCard')->name('index.projects.single.card')->middleware('UserRoutePermission');
 
+//create card desc
+Route::post('/projects/single/card/desc', 'FrontController@cardDescAdd')->name('index.projects.card.desc');
+//create card desc edit
+Route::post('/projects/single/card/desc/edit', 'FrontController@cardDescEdit')->name('index.projects.card.desc.edit');
+//create card desc delete
+Route::post('/projects/single/card/desc/delete', 'FrontController@cardDescDelete')->name('index.projects.card.desc.delete');
+
+//create card task
+Route::post('/projects/single/card/task', 'FrontController@cardTaskAdd')->name('index.projects.card.task');
+////create card task status edit
+Route::post('/projects/single/card/task/statusedit', 'FrontController@taskStatusUpdate')->name('index.projects.card.task.status');
+////create card task edit
+Route::post('/projects/single/card/task/edit', 'FrontController@taskStatusEdit')->name('index.projects.card.task.edit');
+////create card task delete
+Route::post('/projects/single/card/task/delete', 'FrontController@cardTaskDelete')->name('index.projects.card.task.delete');
+
 //============================
 // Profile
 //============================

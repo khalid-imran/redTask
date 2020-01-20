@@ -2,28 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b27f578d-ee99-4fdb-be6b-00f5695f107a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/taskManager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/taskManager.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Task.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FrontController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FrontController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/UserNotRoutePermission.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/UserNotRoutePermission.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Card.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Card.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/CardFile.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/CardFile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Team.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/TeamMembers.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_10_27_000002_create_team_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_10_30_000003_create_team_members_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.scss" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/img/task.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/global/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/global/header.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/global/sideNav.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/global/sideNav.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layout/dashStraucture.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/dashStraucture.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/module/projectSingle.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/module/projectSingle.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/module/projects.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/module/projects.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/module/team.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/module/teamDetail.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/module/profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/module/profile.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/module/projectCard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/module/projectCard.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -138,21 +126,21 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TodoList" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Models" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\xamp\htdocs\projects\taskManager\app\Models" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\xampp\htdocs\project\redTask\app\Models" />
       <recent name="D:\xampp\htdocs\project\redTask" />
       <recent name="E:\xamp\htdocs\projects\taskManager\resources\views\module" />
       <recent name="E:\xamp\htdocs\projects\taskManager\app\Models" />
       <recent name="E:\xamp\htdocs\projects\taskManager\app\Http\Controllers" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\xamp\htdocs\projects\taskManager\app\Models" />
     </key>
   </component>
   <component name="RunManager">
@@ -210,7 +198,7 @@
       <workItem from="1579146169197" duration="19188000" />
       <workItem from="1579231105565" duration="12412000" />
       <workItem from="1579317490958" duration="18590000" />
-      <workItem from="1579491392360" duration="921000" />
+      <workItem from="1579491392360" duration="30321000" />
     </task>
     <servers />
   </component>
@@ -222,13 +210,17 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="276" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1579342969666" />
-    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1579342884516">
+    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1579495485545">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1579342884516" />
+    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1579495485545" />
     <state x="656" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1579491395900">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1579491395900" />
+    <state x="606" y="136" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1579496176084">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="606" y="136" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1579496176084" />
   </component>
 </project>

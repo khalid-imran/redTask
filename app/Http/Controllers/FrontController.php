@@ -6,6 +6,7 @@ use App\Models\Card;
 use App\Models\CardDesc;
 use App\Models\CardFile;
 use App\Models\Projects;
+use App\Models\Task;
 use App\Models\Team;
 use App\Models\TeamMembers;
 use App\User;
@@ -172,7 +173,7 @@ class FrontController extends Controller
             return redirect()->back();
 
         }catch (\Exception $e){
-            dd($e->getMessage());
+
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
@@ -226,15 +227,14 @@ class FrontController extends Controller
     /*Go to single card*/
     public function projectSingleCard($id)
     {
-        $card = Card::where('id',$id)->get()->first();
+        $card = Card::with('desc','task', 'image')->where('id',$id)->get()->first();
         if ($card == null){
             abort('404');
         }
         $card = $card->toArray();
-
         $rv = array(
             'page' => 'projectCardSingle',
-            'card' => $card,
+            'card' => $card
         );
         return view('module.projectCard')->with($rv);
     }
@@ -243,7 +243,7 @@ class FrontController extends Controller
     // Card Desc
     //============================
     /*Card Desc create*/
-    public function CardsDesc(Request $request)
+    public function cardDescAdd(Request $request)
     {
         try{
             $input = $request->input();
@@ -257,43 +257,59 @@ class FrontController extends Controller
 
             $cardModel = new CardDesc();
             $cardModel->card_id = $input['card_id'];
-            $cardModel->desc = $input['desc'];
-            $cardModel->created_at = Carbon::now();
+            $cardModel->description = $input['desc'];
             $cardModel->save();
 
-            return response()->json([
-                'status' => 200,
-                'msg' => 'success'
-            ]);
+            return redirect()->back()->with('success', 'Added successful ');
 
         }catch (\Exception $e){
-            dd($e->getMessage());
-            return redirect()->back()->withErrors($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
-    /*Card Desc get*/
-    public function CardsDescGet(Request $request)
+    /*Card Desc update*/
+    public function cardDescEdit(Request $request)
     {
         try{
             $input = $request->input();
             $validator = Validator::make($input, [
-                'card_id' => 'required',
+                'desc' => 'required',
+                'id' => 'required',
             ]);
             if ($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($input);
             }
-            $desc = CardDesc::where('id', $input['card_id'])->get()->first();
-            return response()->json([
-                'status' => 200,
-                'data' => $desc,
-            ]);
+
+            $cardModel = CardDesc::find($input['id']);
+            $cardModel->description = $input['desc'];
+            $cardModel->save();
+
+//            CardDesc::where('id', $input['card_id'])->update([
+//                'description' => $input['desc']
+//            ]);
+
+            return redirect()->back()->with('success', 'Edited successful ');
 
         }catch (\Exception $e){
-            return response()->json([
-                'status' => 500,
-                'msg' => 'error',
-                'data' =>  $e->getMessage()
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    /*Card Desc delete*/
+    public function cardDescDelete(Request $request)
+    {
+        try{
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'id' => 'required',
             ]);
+            if ($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+
+            CardDesc::destroy($input['id']);
+
+            return redirect()->back()->with('success', 'Deleted successful');
+        }catch (\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -301,35 +317,29 @@ class FrontController extends Controller
     // Card TodoList
     //============================
     /*tasks create action*/
-    public function taskCreate(Request $request){
+    public function cardTaskAdd(Request $request){
         try {
             $input = $request->input();
             $validator = Validator::make($input, [
                 'name' => 'required|string',
-                'user_id' => 'required',
+                'card_id' => 'required',
             ]);
 
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($input);
             }
 
-            $taskModel = new tasks();
+            $taskModel = new Task();
             $taskModel->name =$input['name'];
-            $taskModel->user_id =$input['user_id'];
+            $taskModel->card_id =$input['card_id'];
             $taskModel->status =$input['status'];
             $taskModel->created_at = Carbon::now();
             $taskModel->save();
-            return response()->json([
-                'status' => 200,
-                'msg' => 'success',
-            ]);
+
+            return redirect()->back()->with('success', 'Task add successful');
 
         }catch (\Exception $e){
-            return response()->json([
-                'status' => 500,
-                'msg' => 'error',
-                'data' =>  $e->getMessage()
-            ]);
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
     /*tasks status update*/
@@ -344,12 +354,9 @@ class FrontController extends Controller
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($input);
             }
-
-            $taskModel = new tasks();
-            $taskModel->status =$input['status'];
-            $taskModel->where('id', $input['id'])->update([
-                'status' => $input['status'],
-            ]);
+            $taskModel = Task::find($input['id']);
+            $taskModel->status = $input['status'];
+            $taskModel->save();
             return response()->json([
                 'status' => 200,
                 'msg' => 'success',
@@ -364,7 +371,7 @@ class FrontController extends Controller
         }
     }
     /*tasks Update*/
-    public function taskEdit(Request $request){
+    public function taskStatusEdit(Request $request){
         try {
             $input = $request->input();
             $validator = Validator::make($input, [
@@ -376,11 +383,9 @@ class FrontController extends Controller
                 return redirect()->back()->withErrors($validator->errors())->withInput($input);
             }
 
-            $taskModel = new tasks();
-            $taskModel->name =$input['name'];
-            $taskModel->where('id', $input['id'])->update([
-                'name' => $input['name'],
-            ]);
+            $taskModel = Task::find($input['id']);
+            $taskModel->name = $input['name'];
+            $taskModel->save();
             return response()->json([
                 'status' => 200,
                 'msg' => 'success',
@@ -395,7 +400,7 @@ class FrontController extends Controller
         }
     }
     /*tasks delete*/
-    public function taskDelete(Request $request){
+    public function cardTaskDelete(Request $request){
         try {
             $input = $request->input();
             $validator = Validator::make($input, [
@@ -405,32 +410,12 @@ class FrontController extends Controller
             if($validator->fails()){
                 return redirect()->back()->withErrors($validator->errors())->withInput($input);
             }
-            $taskModel = new tasks();
-            $taskModel->where('id', $input['id'])->delete();
-            return response()->json([
-                'status' => 200,
-                'msg' => 'success',
-            ]);
+            Task::destroy($input['id']);
 
+            return redirect()->back()->with('success', 'Deleted successful');
         }catch (\Exception $e){
-            return response()->json([
-                'status' => 500,
-                'msg' => 'error',
-                'data' =>  $e->getMessage()
-            ]);
+            return redirect()->back()->with('error', $e->getMessage());
         }
-    }
-    /*tasks get action*/
-    public function taskGet(Request $request){
-        $tasks = tasks::where('user_id', Auth::user()->id)->get()->toArray();
-        foreach ($tasks as &$value) {
-            $value['editStatus'] = 0;
-        }
-        return response()->json([
-            'status' => 200,
-            'data' => $tasks,
-        ]);
-
     }
 
 
@@ -438,7 +423,6 @@ class FrontController extends Controller
     // Projects
     //============================
     /*Go to Project*/
-
     public function projects()
     {
         $projects = Projects::where('user_id', Auth::user()->id)->get()->toArray();
@@ -451,7 +435,6 @@ class FrontController extends Controller
 
     /*Go to Project single*/
     public function projectSingle($id)
-
     {
         $project = Projects::where('id',$id)->get()->first();
         if ($project == null){
@@ -466,6 +449,7 @@ class FrontController extends Controller
             'card' => $card,
 
         );
+
         return view('module.projectSingle')->with($rv);
     }
 

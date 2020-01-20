@@ -26,8 +26,17 @@
 </head>
 <body>
 <div class="dash-wrapper">
+    @if(\Session::has('success'))
+        <div class="alert alert-success text-center" style="margin-top: 200px">{{ \Session::get('success') }}</div>
+    @endif
+
+    @if(\Session::has('error'))
+        <div class="alert alert-danger text-center" style="margin-top: 200px">{{ \Session::get('error') }}</div>
+
+    @endif
     @include('global.header')
     @include('global.sideNav')
+
     @yield('content')
 
 </div>
