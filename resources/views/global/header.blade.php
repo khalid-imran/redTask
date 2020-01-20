@@ -7,12 +7,6 @@
             @if($page == 'projects')
             <button class="btn btn-add" data-toggle="modal" data-target="#addProjectModal"><i class="fa fa-plus"></i> Add Project</button>
             @endif
-            @if($page == 'team')
-            <button class="btn btn-add" data-toggle="modal" data-target="#addTeamModal"><i class="fa fa-plus"></i> Add Team</button>
-            @endif
-            @if($page == 'team detail')
-            <button class="btn btn-add" data-toggle="modal" data-target="#addMemberModal"><i class="fa fa-plus"></i> Add Member</button>
-            @endif
             @if(auth()->user()->avatar == '')
                     <img width="40px" class="ml-4 rounded-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmMh_7zL28-d3bYfiEuySLpEar1EHrf25hHI9SkmXlN6jC5Y-P&s" alt="">
             @endif

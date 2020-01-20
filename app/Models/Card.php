@@ -8,9 +8,4 @@ class Card extends Model
 {
     protected $table = 'project_card';
 
-    public function images()
-    {
-        return $this->hasMany(CardFile::class, 'card_id', 'id')->with('images');
-    }
-
 }

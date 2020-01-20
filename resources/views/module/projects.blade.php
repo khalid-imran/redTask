@@ -47,15 +47,6 @@
                             @if($errors->has('project_name'))<small
                                     class="text-danger">{{$errors->first('project_name')}}</small>@endif
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Add members by email"
-                                   name="add_member">
-                        </div>
-                        <div class="form-group">
-                            <select type="text" class="form-control" name="add_team">
-                                <option value="">Select Team</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -84,15 +75,6 @@
                             <input type="hidden" name="id">
                             @if($errors->has('edit_name'))<small
                                     class="text-danger">{{$errors->first('edit_name')}}</small>@endif
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Add members by email"
-                                   name="add_member">
-                        </div>
-                        <div class="form-group">
-                            <select type="text" class="form-control" name="add_team">
-                                <option value="">Select Team</option>
-                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -132,13 +114,13 @@
 
 
 
-    @if(old('add'))
+    @if($errors->has('project_name'))
         <script>
             $(function () {
                 $('#addProjectModal').modal('show');
             })
         </script>
-    @elseif(old('edit'))
+    @elseif($errors->has('edit_name'))
         <script>
             $(function () {
                 $('#editProjectModal').modal('show');

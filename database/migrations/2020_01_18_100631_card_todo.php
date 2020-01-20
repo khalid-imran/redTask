@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTeamTable extends Migration
+class CardTodo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateTeamTable extends Migration
      */
     public function up()
     {
-        Schema::create('team', function (Blueprint $table) {
+        Schema::create('cart_todo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title')->unique();
-            $table->integer('user_id');
+            $table->integer('card_id');
+            $table->string('name');
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateTeamTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('team');
+        Schema::dropIfExists('cart_todo');
     }
 }

@@ -20,7 +20,7 @@
                     </div>
                     @foreach($card as $eachcard)
                         <div class="main-box">
-                            <a href="{{route('')}}" style="text-decoration: none" class="each-item mb-3 font-ash">
+                            <a href="{{route('index.projects.single.card', [$eachcard['id']])}}" style="text-decoration: none" class="each-item mb-3 font-ash">
                                 <div>{{$eachcard['title']}}</div>
                             </a>
                             <div class="btn-grp">
@@ -70,7 +70,7 @@
         </div>
     </div>
     <!--Add Modal -->
-    <div class="modal fade" id="addProjectCard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addProjectCard" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="{{route('index.projects.card')}}" method="post">
@@ -84,20 +84,20 @@
                 <div class="modal-body">
                     <input type="hidden" value="{{$project['id']}}" name="project_id">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Title" name="title">
+                            <input type="text" class="form-control" placeholder="Title" name="title"  value="{{old('title')}}">
                             @if($errors->has('title'))<small class="text-danger">{{$errors->first('title')}}</small>@endif
                         </div>
-                        {{--<div class="form-group">--}}
-                            {{--<textarea name="description" id="" cols="30" rows="8" class="form-control" placeholder="Description"></textarea>--}}
-                        {{--</div>--}}
-                         {{--<div class="form-group">--}}
-                             {{--<div class="mb-3">Attachment</div>--}}
-                             {{--<div id="img_view">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <textarea name="description" id="" cols="30" rows="8" class="form-control" placeholder="Description"></textarea>--}}
+{{--                        </div>--}}
+{{--                         <div class="form-group">--}}
+{{--                             <div class="mb-3">Attachment</div>--}}
+{{--                             <div id="img_view">--}}
 
-                             {{--</div>--}}
-                            {{--<input type="file" onchange="uploadImg(event)" name="input_img" class="btn btn-ash">--}}
-                         {{--</div>--}}
-                        {{--<input type="hidden" id="media_id" name="media_id">--}}
+{{--                             </div>--}}
+{{--                            <input type="file" onchange="uploadImg(event)" name="input_img" class="btn btn-ash">--}}
+{{--                         </div>--}}
+{{--                        <input type="hidden" id="media_id" name="media_id">--}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -122,17 +122,17 @@
                 <div class="modal-body">
                     <input type="hidden" id="id" name="card_id">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Title" name="edit_title">
+                            <input type="text" value="{{old('edit_title')}}" class="form-control" placeholder="Title" name="edit_title">
                             @if($errors->has('edit_title'))<small class="text-danger">{{$errors->first('edit_title')}}</small>@endif
                         </div>
-                        {{--<div class="form-group">--}}
-                            {{--<textarea name="edit_description" id="" cols="30" rows="8" class="form-control" placeholder="Description"></textarea>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<div class="mb-3">Attachment</div>--}}
-                            {{--<button class="btn btn-ash">Add an attachment</button>--}}
-                        {{--</div>--}}
-                    {{--<input type="hidden">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <textarea name="edit_description" id="" cols="30" rows="8" class="form-control" placeholder="Description"></textarea>--}}
+{{--                        </div>--}}
+{{--                        <div class="form-group">--}}
+{{--                            <div class="mb-3">Attachment</div>--}}
+{{--                            <button class="btn btn-ash">Add an attachment</button>--}}
+{{--                        </div>--}}
+{{--                    <input type="hidden">--}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -169,13 +169,6 @@
         </div>
     </div>
     <script>
-        function openDetail(data) {
-            let title = '<span>'+data.title+'</span>';
-            let desc = '<span>'+data.description+'</span>';
-            $('#title').html(title);
-            $('#desc').html(desc);
-            $('#viewProjectCard').modal('show')
-        }
 
         function openEditModal(data) {
          $('input[name=edit_title]').val(data.title);
@@ -230,13 +223,13 @@
         }
     </script>
 
-    @if(old('add'))
+    @if($errors->has('title'))
         <script>
             $(function () {
                 $('#addProjectCard').modal('show');
             })
         </script>
-    @elseif(old('edit'))
+    @elseif($errors->has('edit_title'))
         <script>
             $(function () {
                 $('#editProjectCard').modal('show');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
+use App\Models\CardDesc;
 use App\Models\CardFile;
 use App\Models\Projects;
 use App\Models\Team;
@@ -127,54 +128,9 @@ class FrontController extends Controller
     }
 
     //============================
-    // Projects
+    // Projects Card
     //============================
-    public function projects()
-    {
-        $projects = Projects::where('user_id', Auth::user()->id)->get()->toArray();
-        $rv = array(
-            'page' => 'projects',
-            'projects' => $projects,
-        );
-        return view('module.projects')->with($rv);
-    }
-    public function projectSingle($id)
-    {
-        $project = Projects::where('id',$id)->get()->first();
-        if ($project == null){
-            abort('404');
-        }
-        $project = $project->toArray();
-        $card = Card::where('project_id', $id)->get()->toArray();
-//        $card = Card::with('images')->where('project_id', $id)->get()->toArray();
-
-
-        $rv = array(
-            'page' => 'projectsSingle',
-            'project' => $project,
-            'card' => $card,
-
-        );
-        return view('module.projectSingle')->with($rv);
-    }
-    public function projectSingleCard($id)
-    {
-        $card = Card::where('id',$id)->get()->first();
-        if ($card == null){
-            abort('404');
-        }
-        $card = $card->toArray();
-        $cardDetail = CardFile::where('card_id', $id)->get()->toArray();
-
-        $rv = array(
-            'page' => 'projectsSingle',
-            'card' => $card,
-            'cardDetail' => $cardDetail,
-
-        );
-        return view('module.projectCard')->with($rv);
-    }
-
+    /*Project Card create*/
     public function projectCards(Request $request)
     {
         try{
@@ -184,38 +140,34 @@ class FrontController extends Controller
                 'title' => 'required',
             ]);
             if ($validator->fails()){
-                $input['type'] = 'add';
                 return redirect()->back()->withErrors($validator->errors())->withInput($input);
             }
 
             $cardModel = new Card();
             $cardModel->project_id = $input['project_id'];
             $cardModel->title = $input['title'];
-            $cardModel->description = $input['description'];
             $cardModel->created_at = Carbon::now();
             $cardModel->save();
-            $cardId = $cardModel->id;
-            if($cardId > 0){
-                $mediaIds = isset($input['media_id']) ? $input['media_id'] : '';
-                if($mediaIds != ''){
-                    $mediaIds = explode(',', $mediaIds);
-                    $mediaArr = [];
-                    foreach ($mediaIds as $mediaId){
-                        if($mediaId != '' && $mediaId > 0){
-                            $mediaArr[] = array(
-                                'card_id' => $cardId,
-                                'media_id' => $mediaId,
-                                'created_at' => Carbon::now()
-                            );
-                        }
-                    }
-                    if(count($mediaArr) > 0){
-                        CardFile::insert($mediaArr);
-                    }
-                }
-            }
-
-
+            /*  $cardId = $cardModel->id;
+              if($cardId > 0){
+                  $mediaIds = isset($input['media_id']) ? $input['media_id'] : '';
+                  if($mediaIds != ''){
+                      $mediaIds = explode(',', $mediaIds);
+                      $mediaArr = [];
+                      foreach ($mediaIds as $mediaId){
+                          if($mediaId != '' && $mediaId > 0){
+                              $mediaArr[] = array(
+                                  'card_id' => $cardId,
+                                  'media_id' => $mediaId,
+                                  'created_at' => Carbon::now()
+                              );
+                          }
+                      }
+                      if(count($mediaArr) > 0){
+                          CardFile::insert($mediaArr);
+                      }
+                  }
+              }*/
 
             return redirect()->back();
 
@@ -224,6 +176,7 @@ class FrontController extends Controller
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
+    /*Project Card edit*/
     public function projectCardsEdit(Request $request)
     {
         try{
@@ -239,8 +192,7 @@ class FrontController extends Controller
 
             $cardModel = new Card();
             $cardModel->where('id', $input['card_id'])->update([
-                'title' => $input['edit_title'],
-                'description' => $input['edit_description'],
+                'title' => $input['edit_title']
             ]);
 
             return redirect()->back();
@@ -250,6 +202,7 @@ class FrontController extends Controller
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
+    /*Project Card delete*/
     public function projectCardsDelete(Request $request)
     {
         try{
@@ -270,6 +223,252 @@ class FrontController extends Controller
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
+    /*Go to single card*/
+    public function projectSingleCard($id)
+    {
+        $card = Card::where('id',$id)->get()->first();
+        if ($card == null){
+            abort('404');
+        }
+        $card = $card->toArray();
+
+        $rv = array(
+            'page' => 'projectCardSingle',
+            'card' => $card,
+        );
+        return view('module.projectCard')->with($rv);
+    }
+
+    //============================
+    // Card Desc
+    //============================
+    /*Card Desc create*/
+    public function CardsDesc(Request $request)
+    {
+        try{
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'card_id' => 'required',
+                'desc' => 'required',
+            ]);
+            if ($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+
+            $cardModel = new CardDesc();
+            $cardModel->card_id = $input['card_id'];
+            $cardModel->desc = $input['desc'];
+            $cardModel->created_at = Carbon::now();
+            $cardModel->save();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'success'
+            ]);
+
+        }catch (\Exception $e){
+            dd($e->getMessage());
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+    }
+    /*Card Desc get*/
+    public function CardsDescGet(Request $request)
+    {
+        try{
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'card_id' => 'required',
+            ]);
+            if ($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+            $desc = CardDesc::where('id', $input['card_id'])->get()->first();
+            return response()->json([
+                'status' => 200,
+                'data' => $desc,
+            ]);
+
+        }catch (\Exception $e){
+            return response()->json([
+                'status' => 500,
+                'msg' => 'error',
+                'data' =>  $e->getMessage()
+            ]);
+        }
+    }
+
+    //============================
+    // Card TodoList
+    //============================
+    /*tasks create action*/
+    public function taskCreate(Request $request){
+        try {
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'name' => 'required|string',
+                'user_id' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+
+            $taskModel = new tasks();
+            $taskModel->name =$input['name'];
+            $taskModel->user_id =$input['user_id'];
+            $taskModel->status =$input['status'];
+            $taskModel->created_at = Carbon::now();
+            $taskModel->save();
+            return response()->json([
+                'status' => 200,
+                'msg' => 'success',
+            ]);
+
+        }catch (\Exception $e){
+            return response()->json([
+                'status' => 500,
+                'msg' => 'error',
+                'data' =>  $e->getMessage()
+            ]);
+        }
+    }
+    /*tasks status update*/
+    public function taskStatusUpdate(Request $request){
+        try {
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'id' => 'required|string',
+                'status' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+
+            $taskModel = new tasks();
+            $taskModel->status =$input['status'];
+            $taskModel->where('id', $input['id'])->update([
+                'status' => $input['status'],
+            ]);
+            return response()->json([
+                'status' => 200,
+                'msg' => 'success',
+            ]);
+
+        }catch (\Exception $e){
+            return response()->json([
+                'status' => 500,
+                'msg' => 'error',
+                'data' =>  $e->getMessage()
+            ]);
+        }
+    }
+    /*tasks Update*/
+    public function taskEdit(Request $request){
+        try {
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'id' => 'required',
+                'name' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+
+            $taskModel = new tasks();
+            $taskModel->name =$input['name'];
+            $taskModel->where('id', $input['id'])->update([
+                'name' => $input['name'],
+            ]);
+            return response()->json([
+                'status' => 200,
+                'msg' => 'success',
+            ]);
+
+        }catch (\Exception $e){
+            return response()->json([
+                'status' => 500,
+                'msg' => 'error',
+                'data' =>  $e->getMessage()
+            ]);
+        }
+    }
+    /*tasks delete*/
+    public function taskDelete(Request $request){
+        try {
+            $input = $request->input();
+            $validator = Validator::make($input, [
+                'id' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return redirect()->back()->withErrors($validator->errors())->withInput($input);
+            }
+            $taskModel = new tasks();
+            $taskModel->where('id', $input['id'])->delete();
+            return response()->json([
+                'status' => 200,
+                'msg' => 'success',
+            ]);
+
+        }catch (\Exception $e){
+            return response()->json([
+                'status' => 500,
+                'msg' => 'error',
+                'data' =>  $e->getMessage()
+            ]);
+        }
+    }
+    /*tasks get action*/
+    public function taskGet(Request $request){
+        $tasks = tasks::where('user_id', Auth::user()->id)->get()->toArray();
+        foreach ($tasks as &$value) {
+            $value['editStatus'] = 0;
+        }
+        return response()->json([
+            'status' => 200,
+            'data' => $tasks,
+        ]);
+
+    }
+
+
+    //============================
+    // Projects
+    //============================
+    /*Go to Project*/
+
+    public function projects()
+    {
+        $projects = Projects::where('user_id', Auth::user()->id)->get()->toArray();
+        $rv = array(
+            'page' => 'projects',
+            'projects' => $projects,
+        );
+        return view('module.projects')->with($rv);
+    }
+
+    /*Go to Project single*/
+    public function projectSingle($id)
+
+    {
+        $project = Projects::where('id',$id)->get()->first();
+        if ($project == null){
+            abort('404');
+        }
+        $project = $project->toArray();
+        $card = Card::where('project_id', $id)->get()->toArray();
+
+        $rv = array(
+            'page' => 'projectsSingle',
+            'project' => $project,
+            'card' => $card,
+
+        );
+        return view('module.projectSingle')->with($rv);
+    }
+
 
     public function projectsCreate(Request $request)
     {
@@ -331,163 +530,6 @@ class FrontController extends Controller
 
             $projectModel = new Projects();
             $projectModel->where('id', $input['delete_id'])->delete();
-
-            return redirect()->back();
-
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-
-
-    //============================
-    // Team
-    //============================
-    public function team()
-    {
-        $team = Team::where('user_id', Auth::user()->id)->get()->toArray();
-        $rv = array(
-            'page' => 'team',
-            'team' => $team,
-        );
-        return view('module.team')->with($rv);
-    }
-    public function teamDetail($id)
-    {
-        $team = Team::where('id',$id)->get()->first();
-        if($team == null){
-            abort('404');
-        }
-        $team = $team->toArray();
-        $users = User::where('id', '!=', auth()->id())->get()->toArray();
-        $teamMembers = TeamMembers::where('team_id', $id)->get()->toArray();
-        $teamRel = [];
-        foreach ($teamMembers as $member){
-            $memberId = $member['user_id'];
-            array_push($teamRel, $memberId);
-        }
-        $members = User::whereIn('id', $teamRel)->get();
-        $rv = array(
-            'page' => 'team detail',
-            'users' => $users,
-            'team_id' => $id,
-            'members' => $members,
-            'team' => $team,
-        );
-        return view('module.teamDetail')->with($rv);
-    }
-
-    public function teamCreate(Request $request)
-    {
-        try{
-            $input = $request->input();
-            $validator = Validator::make($input, [
-                'title' => 'required|unique:team',
-            ]);
-            if ($validator->fails()){
-                $input['type'] = 'create';
-                return redirect()->back()->withErrors($validator->errors())->withInput($input);
-            }
-
-            $projectModel = new Team();
-            $projectModel->title = $input['title'];
-            $projectModel->user_id = auth()->user()->id;
-            $projectModel->save();
-
-            return redirect()->back();
-
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-    public function teamEdit(Request $request)
-    {
-        try{
-            $input = $request->input();
-            $validator = Validator::make($input, [
-                'edit_title' => 'required|unique:team,title',
-            ]);
-            if ($validator->fails()){
-                $input['type'] = 'edit';
-                return redirect()->back()->withErrors($validator->errors())->withInput($input);
-            }
-
-            $projectModel = new Team();
-            $projectModel->where('id', $input['id'])->update([
-                'title' => $input['edit_title']
-            ]);
-
-            return redirect()->back();
-
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-    public function teamDelete(Request $request)
-    {
-        try{
-            $input = $request->input();
-            $validator = Validator::make($input, [
-                'delete_id' => 'required',
-            ]);
-            if ($validator->fails()){
-                $input['type'] = 'remove';
-                return redirect()->back()->withErrors($validator->errors())->withInput($input);
-            }
-
-            $projectModel = new Team();
-            $projectModel->where('id', $input['delete_id'])->delete();
-
-            return redirect()->back();
-
-        }catch (\Exception $e){
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-
-    public function teamMemberAdd(Request $request)
-    {
-        try{
-            $input = $request->input();
-            $validator = Validator::make($input, [
-                'team_id' => 'required',
-                'users' => 'required|array',
-            ]);
-            if ($validator->fails()){
-                return redirect()->back()->withErrors($validator->errors())->withInput($input);
-            }
-
-            foreach ($input['users'] as $id){
-                $userRel = array(
-                    'team_id' => $input['team_id'],
-                    'user_id' => $id,
-                );
-                $check = TeamMembers::where($userRel)->get()->first();
-                if($check == null){
-                    TeamMembers::insert([$userRel]);
-                }
-            }
-
-            return redirect()->back();
-
-        }catch (\Exception $e){
-            dd($e->getMessage());
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-    public function teamMemberDelete(Request $request)
-    {
-        try{
-            $input = $request->input();
-            $validator = Validator::make($input, [
-                'delete_id' => 'required',
-            ]);
-            if ($validator->fails()){
-                return redirect()->back()->withErrors($validator->errors())->withInput($input);
-            }
-
-            $memberModel = new TeamMembers();
-            $memberModel->where('user_id', $input['delete_id'])->delete();
 
             return redirect()->back();
 

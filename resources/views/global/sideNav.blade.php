@@ -7,16 +7,10 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="{{$page === 'projects' || $page === 'projectsSingle' ? 'active' : ''}}">
+            <li class="{{$page === 'projects' || $page === 'projectsSingle'|| $page === 'projectCardSingle' ? 'active' : ''}}">
                 <a href="{{route('index.projects')}}">
                     <i class="fa fa-clone"></i>
                     <span>Projects</span>
-                </a>
-            </li>
-            <li class="{{$page === 'team' || $page === 'team detail' ? 'active' : ''}}">
-                <a href="{{route('index.team')}}">
-                    <i class="fa fa-users"></i>
-                    <span>Team</span>
                 </a>
             </li>
         </ul>

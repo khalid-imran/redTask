@@ -41,29 +41,16 @@ Route::get('/projects', 'FrontController@projects')->name('index.projects')->mid
 Route::post('/projectsCreate', 'FrontController@projectsCreate')->name('index.projects.create');
 Route::post('/projectsEdit', 'FrontController@projectsEdit')->name('index.projects.edit');
 Route::post('/projectsDelete', 'FrontController@projectsDelete')->name('index.projects.delete');
-
 Route::get('/projects/single/{id}', 'FrontController@projectSingle')->name('index.projects.single')->middleware('UserRoutePermission');
-Route::get('/projects/single/card/{id}', 'FrontController@projectSingleCard')->name('index.projects.single.card')->middleware('UserRoutePermission');
 
+//============================
+// Card
+//============================
 Route::post('/projects/card', 'FrontController@projectCards')->name('index.projects.card');
 Route::post('/projects/card/edit', 'FrontController@projectCardsEdit')->name('index.projects.card.edit');
 Route::post('/projects/card/delete', 'FrontController@projectCardsDelete')->name('index.projects.card.delete');
 
-
-//============================
-// Team
-//============================
-Route::get('/team', 'FrontController@team')->name('index.team')->middleware('UserRoutePermission');
-Route::get('/team/detail/{id}', 'FrontController@teamDetail')->name('index.team.detail')->middleware('UserRoutePermission');
-
-Route::post('/teamCreate', 'FrontController@teamCreate')->name('index.team.create');
-Route::post('/teamEdit', 'FrontController@teamEdit')->name('index.team.edit');
-Route::post('/teamDelete', 'FrontController@teamDelete')->name('index.team.delete');
-
-Route::post('/teamMemberAdd', 'FrontController@teamMemberAdd')->name('index.team.add');
-Route::post('/teamMemberDelete', 'FrontController@teamMemberDelete')->name('index.team.add.delete');
-
-
+Route::get('/projects/single/card/{id}', 'FrontController@projectSingleCard')->name('index.projects.single.card')->middleware('UserRoutePermission');
 
 //============================
 // Profile
